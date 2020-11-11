@@ -16,7 +16,6 @@ steps:
   sources: .
   level: DEBUG
   showProfiling: true
-  commands:
   
 
 trigger:
