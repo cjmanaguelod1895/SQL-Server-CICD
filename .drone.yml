@@ -17,8 +17,6 @@ steps:
   level: DEBUG
   showProfiling: true
   commands:
-    - dotnet sonarscanner begin o:"cjmanaguelod1895" k:"cjmanaguelod1895_SQL-Server-CICD" d:sonar.host.url="https://sonarcloud.io"
-    - dotnet sonarscanner end
   
 
 trigger:
