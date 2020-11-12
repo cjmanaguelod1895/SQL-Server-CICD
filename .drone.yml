@@ -11,11 +11,11 @@ steps:
     sonar_token:
       from_secret: sonar_token
     
-  ver: 1.0
-  timeout: 20
-  sources: .
-  level: DEBUG
-  showProfiling: true
+ver: 1.0
+timeout: 20
+sources: .
+level: DEBUG
+showProfiling: true
   
 
 trigger:
