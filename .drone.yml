@@ -11,13 +11,13 @@ steps:
     sonar_token:
       from_secret: sonar_token
       
-  ver: 1.0
-  timeout: 20
-  sources: .
-  level: DEBUG
-  showProfiling: true
-  exclusions: **/static/**/*,**/dist/**/*.js
-  usingProperties: false
+   ver: 1.0
+   timeout: 20
+   sources: .
+   level: DEBUG
+   showProfiling: true
+   exclusions: **/static/**/*,**/dist/**/*.js
+   usingProperties: false
    
 
 trigger:
