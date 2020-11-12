@@ -1,30 +1,32 @@
 kind: pipeline
 type: docker
-name: Use Sonarqube
-
+name: Build Project
 steps:
-- name: code-analysis
-  image: aosapps/drone-sonar-plugin
-  settings:
-    sonar_host:
-      from_secret: sonar_host
-    sonar_token:
-      from_secret: sonar_token
-      
-  ver: 1.0
-  timeout: 20
-  sources: .
-  level: DEBUG
-  showProfiling: true
-  exclusions: **/static/**/*,**/dist/**/*.js
-  usingProperties: false
-   
-
+  - name: clean
+    image: 'mcr.microsoft.com/dotnet/sdk:latest'
+    commands:
+      - dotnet clean CDE_Operations/CDE_Operations.sln
+  - name: build
+    image: 'mcr.microsoft.com/dotnet/core/sdk:latest'
+    commands:
+      - dotnet build CDE_Operations/CDE_Operations.sln
+  - name: Deploy to Azure SQL Database
+    image: sijaymm/sqlpackage
+    environment:
+      SERVER_NAME:
+        from_secret: SERVER_NAME
+      DB_NAME:
+        from_secret: DB_NAME
+      USERNAME:
+        from_secret: USERNAME
+      PASSWORD:
+        from_secret: PASSWORD
+    commands:
+      - >-
+        sqlpackage /a:Publish /p:VerifyDeployment=True /p:CommandTimeout=0
+        /p:DatabaseServiceObjective=P2 /p:AllowIncompatiblePlatform=True
+        /tsn:tcp:$SERVER_NAME /tdn:$DB_NAME /tu:$USERNAME /tp:$PASSWORD
+        /sf:/drone/src/CDE_Operations/CDE_Operations.Database.build/bin/Debug/netstandard2.0/CDE_Operations.Database.build.dacpac
 trigger:
   branch:
-    include:
-      - develop
-  event:
-    include:
-      - push
-
+    - MMS-225--CleanUp
